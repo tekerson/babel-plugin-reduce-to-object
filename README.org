@@ -1,0 +1,35 @@
+* Reduce-to-Object Babel Plugin
+
+** Status
+   EXPERIMENTAL
+   Initial proof of concept implementation to learn how babel plugins work. Since I don't believe it is possible to actually detect instances of ~Array.prototoype.reduce~ without types it tries to be fairly conservative about what is considered a reduce-to-object, in order to avoid false positives.
+
+** Purpose
+   Optimise the pure functional form of using a ~reduce~ to create an object by mutating the target object instead of creating a new object on every iteration.
+
+** Example
+   A "pure reducer" form of creating an object (using object spread), may look like:
+
+#+BEGIN_SRC js
+  const values = ['a', 'b', 'c']
+
+  const result = values.reduce((acc, value) => ({
+    ...acc,
+    [value]: () => value.toUpperCase()
+  }), {})
+#+END_SRC
+
+But, this creates a new object every iteration. This plugin will transform it into:
+
+#+BEGIN_SRC js
+  const values = ['a', 'b', 'c'];
+
+  const result = values.reduce(function (acc, value) {
+    Object.assign(acc, {
+      [value]: () => value.toUpperCase()
+    });
+    return acc;
+  }, {});
+#+END_SRC
+
+Which mutates the target object, potentially saving on garbage collection. Though, I haven't actually benchmarked the difference. It wasn't the point of the excercise.

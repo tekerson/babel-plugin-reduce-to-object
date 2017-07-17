@@ -1,0 +1,16 @@
+{
+  "name": "babel-plugin-reduce-to-object",
+  "version": "1.0.0",
+  "description": "Replace reducing into a new object with mutation",
+  "main": "index.js",
+  "scripts": {
+    "example": "node run.js example.js"
+  },
+  "keywords": ["babel", "babel-plugin"],
+  "author": "Brenton Alker <brenton@tekerson.com>",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0"
+  }
+}
